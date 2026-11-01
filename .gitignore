@@ -1,0 +1,26 @@
+.gradle/
+.idea/
+**/build/
+local.properties
+**/local.properties
+**/google-services.json
+firebase.local.properties
+*.jks
+*.keystore
+*.pem
+*service-account*.json
+.env
+.env.*
+!.env.example
+node_modules/
+firebase/.firebase/
+firebase/*debug.log
+firebase/emulator-data/
+simulation/.state/
+tmp/
+*.log
+
+# Plantilla inicial conservada fuera del módulo ViaTech
+/app/
+
+.kotlin/

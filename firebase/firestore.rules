@@ -1,0 +1,128 @@
+rules_version = '2';
+// Modelo: usuarios/{uid}: uid,rol,activo,auditoriaId (sin correo ni contraseña).
+// zonas/{id}: zonaId,nombre,tipo,activo,sensores,auditoriaId.
+// dispositivos/{id}: dispositivoId,nombre,zonaId,activo,versionFirmware,sensores,
+// ultimaComunicacion(timestamp|null),led,origenDatos,auditoriaId.
+// eventos y lecturas comparten esquema de evento inmutable; fechaHora=recepción servidor,
+// detectadoEn=instante de detección local (máximo 7 días de retención de cola).
+// comandos: comandoId,dispositivoId,tipo,estado,solicitante,creacion,ejecucion,
+// distanciaCm,movimientoDetectado,resultado,origenDatos.
+// auditoria: actor,accion,destino,fechaHora. Solo creación; no edición ni eliminación.
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function signed() { return request.auth != null; }
+    function owner(uid) { return signed() && request.auth.uid == uid; }
+    function user() { return get(/databases/$(database)/documents/usuarios/$(request.auth.uid)).data; }
+    function role(roles) { return signed() && user().activo == true && user().rol in roles; }
+    function admin() { return role(['administrador']); }
+    function telemetry() { return role(['administrador','operador']); }
+    function history() { return role(['administrador','operador','consulta']); }
+    function text(v, max) { return v is string && v.size() > 0 && v.size() <= max; }
+    function identifier(v) { return text(v,64) && v.matches('[a-z0-9_-]+'); }
+    function fields(d, names) { return d.keys().hasAll(names) && d.keys().hasOnly(names); }
+    function sensors(v) { return v is list && v.size() == 2 && v.hasAll(['PIR','HC-SR04']); }
+    function device(id) {
+      return signed() && request.auth.token.get('rol','') == 'dispositivo'
+        && request.auth.token.get('dispositivoId','') == id
+        && get(/databases/$(database)/documents/dispositivos/$(id)).data.activo == true;
+    }
+    function activeZone(id) { return get(/databases/$(database)/documents/zonas/$(id)).data.activo == true; }
+    function audit(id, action, target) {
+      let a = getAfter(/databases/$(database)/documents/auditoria/$(id)).data;
+      return text(id,64) && a.actor == request.auth.uid && a.accion == action
+        && a.destino == target && a.fechaHora == request.time;
+    }
+    function validUser(d,uid) {
+      return fields(d,['uid','rol','activo','auditoriaId']) && d.uid == uid && text(d.uid,128)
+        && d.rol in ['administrador','operador','consulta'] && d.activo is bool && text(d.auditoriaId,64);
+    }
+    function validZone(d,id) {
+      return fields(d,['zonaId','nombre','tipo','activo','sensores','auditoriaId'])
+        && identifier(id) && d.zonaId == id && text(d.nombre,80)
+        && d.tipo in ['paso_cebra','acceso_peatonal','zona_vehicular','lomo_toro']
+        && d.activo is bool && sensors(d.sensores) && text(d.auditoriaId,64);
+    }
+    function validDevice(d,id) {
+      return fields(d,['dispositivoId','nombre','zonaId','activo','versionFirmware','sensores','ultimaComunicacion','led','origenDatos','auditoriaId'])
+        && identifier(id) && d.dispositivoId == id && text(d.nombre,80) && identifier(d.zonaId)
+        && exists(/databases/$(database)/documents/zonas/$(d.zonaId))
+        && d.activo is bool && text(d.versionFirmware,32) && sensors(d.sensores)
+        && (d.ultimaComunicacion == null || d.ultimaComunicacion is timestamp)
+        && d.led is bool && d.origenDatos == 'simulado' && text(d.auditoriaId,64);
+    }
+    function validEvent(d,id) {
+      return fields(d,['eventoId','dispositivoId','zonaId','tipoEvento','sensorOrigen','distanciaCm','movimientoDetectado','nivelRiesgo','fechaHora','detectadoEn','estadoSincronizacion','versionFirmware','lecturaValida','origenDatos','descripcion'])
+        && d.eventoId == id && text(id,64) && identifier(d.dispositivoId) && identifier(d.zonaId)
+        && d.zonaId == get(/databases/$(database)/documents/dispositivos/$(d.dispositivoId)).data.zonaId
+        && activeZone(d.zonaId)
+        && d.tipoEvento in ['presencia_peatonal','aproximacion_peligrosa','lectura_invalida','sin_riesgo']
+        && d.sensorOrigen in ['PIR','HC-SR04','PIR+HC-SR04']
+        && d.movimientoDetectado is bool && d.lecturaValida is bool
+        && ((d.lecturaValida && d.distanciaCm is number && d.distanciaCm >= 2 && d.distanciaCm <= 400)
+          || (!d.lecturaValida && d.distanciaCm == null && d.tipoEvento == 'lectura_invalida'))
+        && d.nivelRiesgo == (!d.lecturaValida ? 'informacion' : (d.distanciaCm < 50 && d.movimientoDetectado ? 'riesgo' : (d.distanciaCm < 100 ? 'advertencia' : 'informacion')))
+        && d.fechaHora == request.time && d.detectadoEn is timestamp
+        && d.detectadoEn <= request.time + duration.value(5,'m')
+        && d.detectadoEn >= request.time - duration.value(7,'d')
+        && d.estadoSincronizacion == 'sincronizado' && text(d.versionFirmware,32)
+        && d.origenDatos == 'simulado' && text(d.descripcion,300);
+    }
+    function validCommand(d,id) {
+      return fields(d,['comandoId','dispositivoId','tipo','estado','solicitante','creacion','ejecucion','distanciaCm','movimientoDetectado','resultado','origenDatos'])
+        && d.comandoId == id && text(id,64) && identifier(d.dispositivoId)
+        && get(/databases/$(database)/documents/dispositivos/$(d.dispositivoId)).data.activo == true
+        && d.tipo in ['led_on','led_off','solicitar_lectura','simular_lectura']
+        && d.estado in ['pendiente','ejecutado','error'] && text(d.solicitante,128)
+        && d.creacion is timestamp && (d.ejecucion == null || d.ejecucion is timestamp)
+        && d.distanciaCm is number && d.distanciaCm >= 2 && d.distanciaCm <= 400
+        && d.movimientoDetectado is bool && d.resultado is string && d.resultado.size() <= 160
+        && d.origenDatos == 'simulado';
+    }
+    match /usuarios/{uid} {
+      allow read: if owner(uid) || admin();
+      allow create: if admin() && !owner(uid) && validUser(request.resource.data,uid) && audit(request.resource.data.auditoriaId,'usuario',uid);
+      allow update: if admin() && !owner(uid) && validUser(request.resource.data,uid) && request.resource.data.uid == resource.data.uid && audit(request.resource.data.auditoriaId,'usuario',uid);
+    }
+    match /zonas/{id} {
+      allow read: if history() || (signed() && request.auth.token.get('rol','') == 'dispositivo');
+      allow create, update: if admin() && validZone(request.resource.data,id) && audit(request.resource.data.auditoriaId,'zona',id);
+    }
+    match /dispositivos/{id} {
+      allow read: if telemetry() || device(id);
+      allow create: if admin() && validDevice(request.resource.data,id) && request.resource.data.ultimaComunicacion == null && audit(request.resource.data.auditoriaId,'dispositivo',id);
+      allow update: if validDevice(request.resource.data,id) && (
+        (admin() && request.resource.data.ultimaComunicacion == resource.data.ultimaComunicacion
+          && request.resource.data.led == resource.data.led && audit(request.resource.data.auditoriaId,'dispositivo',id))
+        || (device(id) && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['ultimaComunicacion','led','versionFirmware'])
+          && request.resource.data.ultimaComunicacion == request.time));
+    }
+    match /eventos/{id} {
+      allow read: if history() || device(resource.data.dispositivoId);
+      allow create: if device(request.resource.data.dispositivoId) && validEvent(request.resource.data,id);
+    }
+    match /lecturas/{id} {
+      allow read: if telemetry() || device(resource.data.dispositivoId);
+      allow create: if device(request.resource.data.dispositivoId) && validEvent(request.resource.data,id);
+    }
+    match /comandos/{id} {
+      allow read: if admin() || device(resource.data.dispositivoId);
+      allow create: if admin() && validCommand(request.resource.data,id)
+        && request.resource.data.solicitante == request.auth.uid && request.resource.data.estado == 'pendiente'
+        && request.resource.data.creacion == request.time && request.resource.data.ejecucion == null
+        && request.resource.data.resultado == '' && audit(id,'comando',id);
+      allow update: if device(resource.data.dispositivoId) && validCommand(request.resource.data,id)
+        && resource.data.estado == 'pendiente' && request.resource.data.estado in ['ejecutado','error']
+        && request.resource.data.ejecucion == request.time
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['estado','ejecucion','resultado']);
+    }
+    match /auditoria/{id} {
+      allow read: if admin();
+      allow create: if admin() && text(id,64)
+        && fields(request.resource.data,['actor','accion','destino','fechaHora'])
+        && request.resource.data.actor == request.auth.uid
+        && request.resource.data.accion in ['usuario','zona','dispositivo','comando']
+        && text(request.resource.data.destino,128) && request.resource.data.fechaHora == request.time;
+    }
+    match /{document=**} { allow read, write: if false; }
+  }
+}

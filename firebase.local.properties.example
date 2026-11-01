@@ -1,0 +1,6 @@
+# Copiar como firebase.local.properties en la raíz (archivo ignorado).
+# Configuración pública de la app Android registrada en Firebase, NO clave administrativa.
+firebase.projectId=
+firebase.apiKey=
+firebase.appId=
+emulator.host=10.0.2.2
