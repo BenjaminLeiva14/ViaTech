@@ -3,30 +3,27 @@ Actualizado: 2026-11-01, America/Santiago.
 
 ## Terminado y comprobado
 - Lectura completa de guía Unidad 2, PDF de 17 páginas y referencias Stitch; matriz de requisitos y contradicciones.
-- Android Kotlin/Compose/MVVM, Auth, listeners Firestore, roles, dashboard, eventos, sensores, dispositivos, zonas, control simulado, configuración y administración.
-- APK local generado: android/app/build/outputs/apk/local/debug/app-local-debug.apk.
-- Compilación assembleLocalDebug y cuatro pruebas JVM: BUILD SUCCESSFUL.
+- Android Kotlin/Compose/MVVM, Auth, Firestore, roles, dashboard, eventos, sensores, dispositivos, zonas, control simulado, configuración y administración.
+- APK local y cloud compilados; cuatro pruebas JVM aprobadas.
 - Firebase Emulator: 34 pruebas de reglas, cuatro de dominio y una de Auth aprobadas. Integración aprobada en repetición individual después de corregir cierre del seed y timeout.
-- Integración: identidad de dispositivo, comando ejecutado, evento visto por dos clientes SDK y reconexión Firestore. No equivale a dos Android.
-- Simulador con cola persistente, UUID, heartbeat y LED lógico; firmware/Wokwi teóricos.
-- Google Cloud: viatech-inacap-bleiva-2026 creado. Consulta de API confirma billingEnabled=false y permisos necesarios.
-- Repositorio privado autorizado: https://github.com/BenjaminLeiva14/ViaTech.
+- Firebase nube: viatech-inacap-bleiva-2026, Firestore Standard en Santiago, protección contra borrado y billingEnabled=false comprobados por API.
+- App Android registrada; Email/Password habilitado; reglas e índices desplegados.
+- Siete colecciones con datos. Cuentas humanas de administrador, operador y consulta; identidad independiente de dispositivo.
+- Prueba nube aprobada: login válido/inválido, roles, comando ejecutado, mismo evento remoto en dos clientes SDK, reconexión y logout.
+- Prueba de cola aprobada: red pausada por SDK, terminación del proceso, recuperación desde disco y ausencia de duplicado.
+- Publicación en repositorio privado https://github.com/BenjaminLeiva14/ViaTech mediante conector autorizado.
 
-## En curso
-- Activación de Firebase nube: addFirebase devolvió 403. Usuario confirmó aceptación de términos Firebase. Se requiere sesión nueva tras revocar una sesión expuesta en un diagnóstico.
-- Publicación GitHub del código y evidencias.
-
-## Pendiente de evidencia
-- Firebase nube: base Santiago, Auth, configuración Android, reglas, datos y prueba remota.
+## Pendiente para aceptación académica completa
 - Instalación, navegación, accesibilidad y sincronización en dos Android. ADB no detecta dispositivos; usuario no dispone de teléfono.
 - AVD x86_64 bloqueado: Android Emulator hypervisor driver is not installed on this machine. Intento sin aceleración no produjo un destino ADB.
-- Persistencia de cola después de reinicio del proceso durante corte real, prueba Wi-Fi y Wokwi/hardware.
-- Capturas de pantallas ejecutadas; no se presentan las referencias Stitch como evidencia de la app.
-- Revisión docente/AAI no proporcionada.
+- Capturas de pantallas ejecutadas. No se presentan referencias Stitch como capturas de la app.
+- Prueba Wi-Fi física; Wokwi/PlatformIO y sensores permanecen teóricos, según alcance.
+- Revisión docente y entrega del enlace en AAI corresponden al estudiante.
+- Git CLI no tiene credenciales GitHub; la publicación se verificó con el conector. El respaldo Git local usa entrega-local. Para trabajar con main, autenticar GitHub y clonar el repositorio en una carpeta nueva o recuperar origin/main sin fusionar historiales independientes.
 
-## Problemas resueltos y límites
-- Firebase Auth usa metadata Kotlin 2.4; KGP y Compose alineados a 2.4.10.
-- Arranque Firestore en este equipo supera 60 s: wrapper permite hasta 300 s.
-- Primer conjunto Node: 39 aprobadas y una integración cancelada por timeout. Integración corregida y repetida: 1/1 aprobada. La suite completa no se volvió a ejecutar.
-- npm producción: seis alertas moderadas, cero altas/críticas tras actualización gRPC. No se declara libre de vulnerabilidades.
-- IoT/inalámbrico teóricos, sin infraestructura vial real ni certificación ISO.
+## Evidencia y límites
+- Compilaciones y pruebas: docs/pruebas/resultados.md; resúmenes portables en docs/evidencias.
+- Primer conjunto Node: 39 aprobadas y una integración cancelada por timeout. Integración corregida: 1/1 aprobada en repetición individual. No se afirma una segunda suite completa.
+- Dos clientes SDK no equivalen a dos teléfonos; disableNetwork no equivale a cortar una red Wi-Fi física.
+- npm producción: seis alertas moderadas, cero altas/críticas; evaluar antes de distribuir.
+- Simulación sin infraestructura vial real ni certificación ISO.

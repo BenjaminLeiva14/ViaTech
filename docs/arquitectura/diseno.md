@@ -11,7 +11,7 @@ Wi-Fi permite que ambos Android y el ESP32 teórico accedan a Firebase a través
 
 ## Separación
 - ui: componentes Compose y estados visuales.
-- navigation: Navigation Compose, rutas protegidas por perfil.
+- navegación: Navigation Compose dentro de ui/ViaTechApp.kt, rutas filtradas por perfil.
 - viewmodel: StateFlow, trabajos cancelables, límite de espera de operaciones.
 - data/models: perfiles, registros, validación.
 - data/repositories: autenticación, listeners y escrituras atómicas.

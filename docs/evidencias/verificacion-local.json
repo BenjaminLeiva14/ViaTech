@@ -10,7 +10,11 @@
     },
     "apk": "android/app/build/outputs/apk/local/debug/app-local-debug.apk",
     "sha256": "79e140e0e3ee6f2739a053f300609472ce533dafd55e3325505cac5c1123140e",
-    "instalacionVerificada": false
+    "instalacionVerificada": false,
+    "apkCloud": {
+      "path": "android/app/build/outputs/apk/cloud/debug/app-cloud-debug.apk",
+      "sha256": "fc27695f9be3a4742655d3facac8919bfc2557bdd98322d68d5efef4ae1a522e"
+    }
   },
   "firebaseEmulator": {
     "ejecucionCompleta": {
@@ -31,8 +35,8 @@
   "nube": {
     "projectId": "viatech-inacap-bleiva-2026",
     "billingEnabled": false,
-    "firebaseActivado": false,
-    "ultimoError": "403 PERMISSION_DENIED en addFirebase"
+    "firebaseActivado": true,
+    "referencia": "firebase-cloud.json"
   },
   "iot": {
     "simulado": true,

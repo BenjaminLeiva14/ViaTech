@@ -1,12 +1,12 @@
 # Guion reproducible INACAP
 ## Preparación
-Abrir Android Studio en la raíz, seleccionar localDebug y compilar. Ejecutar Firebase Emulator Suite, seed y simulador. Instalar APK en dos Android (dos AVD o dos teléfonos). Configurar host y puertos según README. Capturar seriales, versión APK y proyecto. La variante cloud requiere proyecto autorizado.
+Abrir Android Studio en la raíz, seleccionar localDebug y compilar. Ejecutar Firebase Emulator Suite, seed y simulador. Instalar APK en dos Android (dos AVD o dos teléfonos). Configurar host y puertos según README. Capturar seriales, versión APK y proyecto. La variante cloud ya apunta a viatech-inacap-bleiva-2026. Ver docs/entrega.md e iniciar node scripts/simulator-cloud.mjs desde firebase.
 ## Demostración
-1. Android A: iniciar admin@viatech.test. Android B: iniciar operador@viatech.test. En nube usar cuentas reales autorizadas, nunca las demo.
+1. Android A: iniciar admin@viatech.test. Android B: iniciar operador@viatech.test. En nube usar cuentas autorizadas de firebase/.env.cloud-demo.json con contraseñas aleatorias; nunca la contraseña pública del laboratorio.
 2. Mostrar badges de simulación, usuario/rol y dashboard.
 3. Control IoT de A: PIR activo, distancia 35, Generar evento simulado.
 4. Mostrar comando pendiente y luego ejecutado. Si el simulador está apagado, no afirmar ejecución.
-5. En Firebase UI, comprobar documentos con el mismo ID en lecturas/eventos y el destinatario del comando.
+5. En Firebase UI local o consola Firestore nube, comprobar documentos con el mismo ID en lecturas/eventos y el destinatario del comando.
 6. En A y B, verificar idéntico eventoId, fecha y origenDatos=simulado. Tomar captura de ambos. La coincidencia de pantallas, sin comprobar ID, no basta.
 7. A: encender LED de prueba y comprobar estado. B: demostrar ausencia de control; pruebas de reglas demuestran denegación incluso enviando solicitud directa.
 8. Android B: configuración, simular desconexión. Mostrar aviso de caché/desactualización.

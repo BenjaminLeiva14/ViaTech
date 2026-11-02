@@ -8,9 +8,9 @@ Precedencia: guía académica > PDF original > Stitch > mejoras > extras. Los do
 | U2-4 | 2.1.4 | Dos Android, comunicación Wi-Fi o Bluetooth | guion y prueba en dos terminales pendiente |
 | PDF-1 | pp.3-9 | PIR, HC-SR04, ESP32, zonas, heartbeat y cola | simulation |
 | PDF-2 | pp.10-16 | Identidad dispositivo separada; roles; validación | reglas y seed |
-| UI-1 | Stitch | Marca V vial, verde, pizarra, tarjetas, formularios | Compose y capturas |
+| UI-1 | Stitch | Marca V vial, verde, pizarra, tarjetas, formularios | Compose; capturas de ejecución pendientes |
 | EXT-1 | Solicitud | Recuperación, filtros, usuarios, auditoría | app y reglas |
-| EXT-2 | Solicitud | GitHub, APK y demostración | entrega pendiente de comprobación |
+| EXT-2 | Solicitud | GitHub, APK y demostración | APK local/cloud compilados y GitHub publicado; dos Android pendientes |
 
 ## Contradicciones resueltas
 - El PDF propone React/Next/Remix; Unidad 2 exige Kotlin/Android Studio. Se implementa Android nativo.

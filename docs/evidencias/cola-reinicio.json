@@ -1,0 +1,10 @@
+{
+  "executedAt": "2026-11-02T00:09:15.965Z",
+  "result": "passed",
+  "eventId": "bd35b2f6-f796-43d5-ac95-626c185d56d9",
+  "offlineMode": "SDK disableNetwork",
+  "processTerminated": true,
+  "persistentQueueRecovered": true,
+  "duplicateCount": 0,
+  "physicalNetworkInterrupted": false
+}

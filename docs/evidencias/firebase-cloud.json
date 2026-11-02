@@ -1,0 +1,27 @@
+{
+  "executedAt": "2026-11-02T00:08:13.603Z",
+  "project": "viatech-inacap-bleiva-2026",
+  "result": "passed",
+  "eventId": "cmd-d844cfae-0997-4f1d-831f-3f6b8e3cb803",
+  "commandId": "d844cfae-0997-4f1d-831f-3f6b8e3cb803",
+  "collections": {
+    "usuarios": 3,
+    "dispositivos": 1,
+    "zonas": 4,
+    "lecturas": 2,
+    "eventos": 2,
+    "auditoria": 2,
+    "comandos": 1
+  },
+  "checks": [
+    "login valido/invalido",
+    "operador sin permiso de comando",
+    "consulta lee evento, no lectura",
+    "comando ejecutado por dispositivo",
+    "dos clientes SDK reciben evento remoto",
+    "reconexion y lectura servidor",
+    "logout"
+  ],
+  "twoAndroidVerified": false,
+  "physicalIoTVerified": false
+}

@@ -14,3 +14,6 @@ npm run seed solo conecta a 127.0.0.1. Crea cuentas ficticias y claims de dispos
 ## Revocación y auditoría
 Desactivar documento usuario/dispositivo deniega nuevas operaciones por reglas. Ante compromiso, revocar refresh tokens en Authentication, rotar credencial y revisar logs. No se permite al administrador cambiarse su propio rol desde la app.
 Las operaciones admin desde Android deben incluir auditoría atómica. Esta auditoría registra cambios, no es prueba criptográfica ni un registro completo de login. Para nube, habilitar Cloud Audit Logs y definir retención/alertas según acceso disponible.
+
+## Entorno creado y probado
+ViaTech usa Firestore Standard Santiago y Email/Password, sin facturación. scripts/seed-cloud.mjs usa la sesión IAM de Firebase CLI en una estación confiable; nunca se incluye en APK. Crea únicamente documentos ausentes, valida el proyecto y no restablece contraseñas existentes. scripts/cloud-smoke.test.mjs verificó roles y comandos; scripts/cloud-queue.test.mjs verificó persistencia tras terminar el proceso. Las cuentas cloud demo usan correos ficticios y contraseñas aleatorias privadas, distintas de las credenciales públicas del emulador.

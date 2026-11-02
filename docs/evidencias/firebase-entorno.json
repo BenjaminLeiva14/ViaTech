@@ -1,0 +1,11 @@
+{
+  "verifiedAt": "2026-11-02T00:11:44.693Z",
+  "project": "viatech-inacap-bleiva-2026",
+  "location": "southamerica-west1",
+  "databaseEdition": "STANDARD",
+  "type": "FIRESTORE_NATIVE",
+  "deleteProtectionState": "DELETE_PROTECTION_ENABLED",
+  "billingEnabled": false,
+  "androidPackage": "cl.amigovirtual.app",
+  "appId": "1:1031041183390:android:76eac31125a23bb75a958f"
+}

@@ -4,7 +4,7 @@ Aplicación Android nativa para observar riesgos simulados alrededor de una plaz
 El sensor PIR representa movimiento; HC-SR04 representa proximidad. No identifican personas, matrículas ni infracciones confirmadas. El LED es un estado de prueba, sin conexión a infraestructura vial.
 
 ## Estado y entrega
-APK local compilado y cuatro pruebas Kotlin aprobadas. Auth, reglas e integración local verificadas; ver [resultados](docs/pruebas/resultados.md) y [avance](PROGRESS.md). La demostración en dos Android y Firebase nube aún necesitan evidencia. Repositorio: https://github.com/BenjaminLeiva14/ViaTech.
+APK local y cloud compilados; cuatro pruebas Kotlin y pruebas Firebase locales y remotas aprobadas. Firestore Standard conectado en Santiago sin facturación. Ver [entrega y accesos locales](docs/entrega.md), [resultados](docs/pruebas/resultados.md) y [avance](PROGRESS.md). La ejecución en dos Android sigue pendiente.
 
 ## Abrir en Android Studio
 Abrir la carpeta raíz del repositorio (ViaTech al clonar; evaluacion2 en el equipo de desarrollo). El módulo :app apunta a android/app. La carpeta app/ original se conserva sin usar.
@@ -50,14 +50,14 @@ Administrador → comando+auditoría → simulador autenticado → lectura+event
 Ver docs/arquitectura/diseno.md y modelo-firestore.md.
 
 ## Firebase nube
-No se activa automáticamente. Iniciar sesión con firebase login en terminal propia. Crear o seleccionar exclusivamente el proyecto ViaTech autorizado, habilitar Email/Password y Firestore Standard.
+Proyecto autorizado conectado: viatech-inacap-bleiva-2026. Email/Password y Firestore Standard en southamerica-west1 habilitados, reglas e índices desplegados, sin facturación comprobada por API. Ver docs/entrega.md para usarlo en otro equipo.
 Registrar Android cl.amigovirtual.app. Copiar firebase.local.properties.example a firebase.local.properties y completar la configuración pública del registro Android. No usar claves privadas.
 Desplegar reglas e índices:
 ```powershell
 cd firebase
-npx firebase deploy --only firestore:rules,firestore:indexes --project ID_AUTORIZADO
+npx firebase deploy --only firestore:rules,firestore:indexes --project viatech-inacap-bleiva-2026
 ```
-Provisionar el primer administrador desde consola/entorno confiable; ver docs/seguridad/provisionamiento.md.
+Cuentas demo provisionadas por IAM autorizado; contraseñas aleatorias en firebase/.env.cloud-demo.json, excluido de Git. Ver docs/seguridad/provisionamiento.md.
 Cloud rechaza HTTP. Local usa HTTP de laboratorio y nunca debe emplearse con contraseñas reales.
 
 ## Dos Android

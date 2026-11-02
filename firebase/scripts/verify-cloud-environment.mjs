@@ -1,0 +1,15 @@
+import {createRequire} from 'node:module';
+import {writeFile} from 'node:fs/promises';
+const require=createRequire(import.meta.url);
+const {command}=require('firebase-tools/lib/commands/projects-addfirebase');
+const {requireAuth}=require('firebase-tools/lib/requireAuth');
+const {Client}=require('firebase-tools/lib/apiv2');
+const project='viatech-inacap-bleiva-2026',options={project,nonInteractive:true};
+await command.prepare(options);await requireAuth(options);
+const f=new Client({urlPrefix:'https://firestore.googleapis.com',apiVersion:'v1'}),b=new Client({urlPrefix:'https://cloudbilling.googleapis.com',apiVersion:'v1'});
+const db=(await f.get('projects/'+project+'/databases/(default)')).body;
+const billing=(await b.get('projects/'+project+'/billingInfo')).body;
+if(billing.billingEnabled!==false || db.locationId!=='southamerica-west1')throw Error('El entorno no coincide con lo autorizado');
+const data={verifiedAt:new Date().toISOString(),project,location:db.locationId,databaseEdition:db.databaseEdition,type:db.type,deleteProtectionState:db.deleteProtectionState,billingEnabled:billing.billingEnabled,androidPackage:'cl.amigovirtual.app',appId:'1:1031041183390:android:76eac31125a23bb75a958f'};
+await writeFile(new URL('../../docs/evidencias/firebase-entorno.json',import.meta.url),JSON.stringify(data,null,2)+'\n');
+console.log(JSON.stringify(data));
