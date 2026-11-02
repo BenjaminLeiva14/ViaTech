@@ -27,3 +27,8 @@ Actualizado: 2026-11-01, America/Santiago.
 - Dos clientes SDK no equivalen a dos teléfonos; disableNetwork no equivale a cortar una red Wi-Fi física.
 - npm producción: seis alertas moderadas, cero altas/críticas; evaluar antes de distribuir.
 - Simulación sin infraestructura vial real ni certificación ISO.
+
+## Actualización de pruebas Compose
+- LoginUiTest migrado a androidx.compose.ui.test.junit4.v2.createAndroidComposeRule para eliminar el aviso de API obsoleta.
+- :app:compileLocalDebugAndroidTestKotlin: BUILD SUCCESSFUL (2 min 41 s; 29 tareas). Evidencia local: docs/pruebas/compose-v2-compile.log.
+- Las pruebas instrumentadas compilan; su ejecución en Android continúa pendiente.
