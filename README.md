@@ -73,4 +73,4 @@ Las preferencias no alteran privilegios. Historial limitado explícitamente; no 
 Las dependencias npm se fijan mediante package-lock.json; revisar el informe de auditoría de dependencias antes de producción.
 
 ## Ventana Python para los sensores
-Abre simulador_python/ABRIR_SIMULADOR.bat para ajustar distancia ultrasónica y movimiento PIR. Funciona en modo visual y permite conectar el simulador existente a Firebase. Ver [instrucciones](simulador_python/INSTRUCCIONES.md) y [archivos excluidos de GitHub](simulador_python/ARCHIVOS_FUERA_DE_GITHUB.md).
+Abre simulador_python/ABRIR_SIMULADOR.py para ajustar distancia ultrasónica y movimiento PIR. Funciona en modo visual y permite conectar el simulador existente a Firebase. Ver [instrucciones](simulador_python/INSTRUCCIONES.md) y [archivos excluidos de GitHub](simulador_python/ARCHIVOS_FUERA_DE_GITHUB.md).
