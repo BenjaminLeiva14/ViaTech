@@ -1,5 +1,5 @@
 {
-  "ejecutadoEn": "2026-11-09T05:27:48.427770+00:00",
+  "ejecutadoEn": "2026-11-09T05:38:25.031667+00:00",
   "resultado": "aprobado",
   "androidVerificado": false,
   "proyecto": "viatech-inacap-bleiva-2026",
@@ -19,42 +19,42 @@
       "distanciaCm": 2,
       "movimientoDetectado": true,
       "nivelRiesgo": "riesgo",
-      "eventoId": "532c7c5e-c5a2-428f-bd44-a859a2e5fa0f",
+      "eventoId": "41d772a5-fafa-469b-9ac5-e6f1299dee48",
       "confirmadoServidor": true
     },
     {
       "distanciaCm": 49.75,
       "movimientoDetectado": true,
       "nivelRiesgo": "riesgo",
-      "eventoId": "18259913-56f8-40d5-a256-81412420d55d",
+      "eventoId": "c311ce6c-ee2d-4d1a-84e7-edc56558aeb5",
       "confirmadoServidor": true
     },
     {
       "distanciaCm": 50,
       "movimientoDetectado": true,
       "nivelRiesgo": "advertencia",
-      "eventoId": "01a786b5-7d49-4235-962e-d179d63e4725",
+      "eventoId": "1d4a106d-5360-4ae0-8829-3c7f0bad4d40",
       "confirmadoServidor": true
     },
     {
       "distanciaCm": 99.5,
       "movimientoDetectado": false,
       "nivelRiesgo": "advertencia",
-      "eventoId": "0c7af979-4a8c-448e-854b-9246a92f9df0",
+      "eventoId": "6f568940-d766-4ce2-ae2c-b742f41d074d",
       "confirmadoServidor": true
     },
     {
       "distanciaCm": 100,
       "movimientoDetectado": false,
       "nivelRiesgo": "informacion",
-      "eventoId": "83323899-56e3-48b5-b782-dd5977283b3c",
+      "eventoId": "d588f51e-94c8-4137-9b5a-d2851c5aeb5d",
       "confirmadoServidor": true
     },
     {
       "distanciaCm": 400,
       "movimientoDetectado": false,
       "nivelRiesgo": "informacion",
-      "eventoId": "f063f251-6c2d-4075-8670-4661bcf578a3",
+      "eventoId": "da4058bb-0a66-46ee-a9e8-fdb41a778dc0",
       "confirmadoServidor": true
     }
   ],
