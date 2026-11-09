@@ -3,10 +3,10 @@ Carpeta independiente del módulo Android: simulador_python/.
 La ventana representa **dos sensores**, el ultrasónico HC-SR04 y el infrarrojo PIR de movimiento. No necesita Arduino, ESP32 físico ni conectar un sensor al computador.
 
 ## Abrir
-En Windows, haz doble clic en **ABRIR_SIMULADOR.bat**.
+En Windows, haz doble clic en **ABRIR_SIMULADOR.py** si .py está asociado a Python. Si se abre un editor, usa el comando siguiente o py -3 ABRIR_SIMULADOR.py.
 También puedes abrir una terminal en esta carpeta y ejecutar:
 ```powershell
-python simulador.py
+python ABRIR_SIMULADOR.py
 ```
 
 Necesitas Python 3.10 o superior con Tkinter. No hay que ejecutar pip install.
@@ -56,7 +56,7 @@ Al detenerse el heartbeat, Android mostrará el dispositivo desconectado despué
 - simulador.py: ventana.
 - sensores.py: validaciones y comportamiento de ambos sensores.
 - conector.py: comunicación opcional con el simulador Firebase existente.
-- ABRIR_SIMULADOR.bat: apertura con doble clic en Windows.
+- ABRIR_SIMULADOR.py: apertura con doble clic en Windows.
 - test_simulador.py: pruebas locales.
 - ARCHIVOS_FUERA_DE_GITHUB.md: explicación de archivos excluidos.
 - VERIFICACION.md: resultados realmente comprobados.
@@ -72,3 +72,10 @@ Desde esta carpeta: python -m unittest -v test_simulador.py.
 Las pruebas locales no acceden a Firebase. Para los resultados de la ventana y de la conexión, consulta VERIFICACION.md.
 
 La prueba gráfica opcional es python prueba_ventana.py. La prueba de integración explícita es python prueba_firebase.py; esta última crea una lectura simulada en Firebase y usa verificar_evento.mjs para comprobarla desde el servidor.
+
+## Credenciales privadas locales
+La copia solicitada está en .env.credenciales-privadas.md dentro de esta carpeta. Contiene correo, rol, UID y contraseña de las cuentas de demostración. Está excluida de GitHub; el programa no lee ese Markdown.
+
+## Prueba de datos y recepción
+Ejecuta python prueba_flujo.py para crear seis lecturas (2, 49.75, 50, 99.5, 100 y 400 cm) con PIR activado/desactivado. Comprueba eventos y lecturas en el servidor y recepción en vivo por administrador y operador con las consultas de la app. Guarda resultado_flujo.json. No equivale a ejecutar Android.
+Para comprobar la pantalla: instala cloudDebug, inicia sesión como operador, abre Eventos o Sensores y envía desde la ventana. localDebug usa emuladores y no recibe los datos de nube.
