@@ -47,3 +47,13 @@ Actualizado: 2026-11-01, America/Santiago.
 - Android sigue pendiente: no hay dispositivo conectado y falta el controlador de aceleración del emulador. No se afirma recepción visual.
 - Markdown de credenciales creado exclusivamente de forma local, excluido de Git y comprobado sin exponer contraseñas.
 - Evidencia ampliada en simulador_python/VERIFICACION.md y resultado_flujo.json.
+
+## Alertas de sensores — 2026-11-09
+- Añadidas señales de sonido y vibración, aviso visual y preferencias persistentes independientes.
+- Criterio compartido con Python: distancia válida menor de 50 cm y PIR activo, origen simulado, confirmación remota y detección reciente.
+- Primer plano solamente: línea base silenciosa al abrir/reconectar, deduplicación por ID y máximo una alerta cada 10 segundos. Respeta silencio/No molestar y se detiene al pausar/cerrar sesión.
+- Agregado controlador.py como acceso a la ventana existente y botones para preparar normal (150 cm/sin PIR) o riesgo (35 cm/PIR).
+- BUILD SUCCESSFUL en 15 min 42 s; APK localDebug y cloudDebug generados. 13/13 pruebas JVM por variante (9 nuevas + 4 existentes). Pruebas instrumentadas compiladas, no ejecutadas.
+- Python: 10/10 pruebas y prueba gráfica aprobadas. Firebase: seis lecturas confirmadas en eventos/lecturas y dos receptores SDK en vivo; cola vacía.
+- ADB sin dispositivos: sonido/vibración físicos y visualización de alerta en Android pendientes. No se afirma recepción en dos teléfonos.
+- Guion en docs/alertas-sensores.md; evidencia en docs/evidencias/alertas.json. Credenciales privadas siguen excluidas de Git.
