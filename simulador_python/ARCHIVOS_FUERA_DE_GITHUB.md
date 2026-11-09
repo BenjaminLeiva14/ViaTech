@@ -34,3 +34,5 @@
 
 Estos son los patrones configurados; no significa que todos los archivos de la lista existan.
 Para saber por qué un archivo específico queda fuera: git check-ignore -v RUTA_DEL_ARCHIVO.
+
+- simulador_python/.env.credenciales-privadas.md: copia local solicitada con credenciales; nunca publicar. Excluida explícitamente y mediante .env.*.
