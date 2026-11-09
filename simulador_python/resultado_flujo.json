@@ -1,0 +1,63 @@
+{
+  "ejecutadoEn": "2026-11-09T05:27:48.427770+00:00",
+  "resultado": "aprobado",
+  "androidVerificado": false,
+  "proyecto": "viatech-inacap-bleiva-2026",
+  "configuracionCloudAndroidCoincide": true,
+  "receptoresSDK": [
+    "administrador",
+    "operador"
+  ],
+  "colecciones": [
+    "eventos",
+    "lecturas"
+  ],
+  "consulta": "orderBy(fechaHora, desc).limit(200)",
+  "recepcionEnTiempoReal": true,
+  "eventos": [
+    {
+      "distanciaCm": 2,
+      "movimientoDetectado": true,
+      "nivelRiesgo": "riesgo",
+      "eventoId": "532c7c5e-c5a2-428f-bd44-a859a2e5fa0f",
+      "confirmadoServidor": true
+    },
+    {
+      "distanciaCm": 49.75,
+      "movimientoDetectado": true,
+      "nivelRiesgo": "riesgo",
+      "eventoId": "18259913-56f8-40d5-a256-81412420d55d",
+      "confirmadoServidor": true
+    },
+    {
+      "distanciaCm": 50,
+      "movimientoDetectado": true,
+      "nivelRiesgo": "advertencia",
+      "eventoId": "01a786b5-7d49-4235-962e-d179d63e4725",
+      "confirmadoServidor": true
+    },
+    {
+      "distanciaCm": 99.5,
+      "movimientoDetectado": false,
+      "nivelRiesgo": "advertencia",
+      "eventoId": "0c7af979-4a8c-448e-854b-9246a92f9df0",
+      "confirmadoServidor": true
+    },
+    {
+      "distanciaCm": 100,
+      "movimientoDetectado": false,
+      "nivelRiesgo": "informacion",
+      "eventoId": "83323899-56e3-48b5-b782-dd5977283b3c",
+      "confirmadoServidor": true
+    },
+    {
+      "distanciaCm": 400,
+      "movimientoDetectado": false,
+      "nivelRiesgo": "informacion",
+      "eventoId": "f063f251-6c2d-4075-8670-4661bcf578a3",
+      "confirmadoServidor": true
+    }
+  ],
+  "colaFinal": 0,
+  "pythonEnvioLecturas": 6
+}
