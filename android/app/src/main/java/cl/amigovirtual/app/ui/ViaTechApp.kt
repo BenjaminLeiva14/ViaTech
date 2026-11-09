@@ -20,6 +20,10 @@ import androidx.compose.ui.text.input.*
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.compose.LifecycleResumeEffect
+import androidx.compose.ui.semantics.LiveRegionMode
+import androidx.compose.ui.semantics.liveRegion
+import androidx.compose.ui.semantics.semantics
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.*
 import cl.amigovirtual.app.BuildConfig
@@ -38,11 +42,29 @@ private fun riskColor(risk: String) = when(risk) { "riesgo" -> Color(0xFFB91C1C)
 @Composable
 fun ViaTechApp(vm: ViaTechViewModel = viewModel()) {
     val state by vm.state.collectAsStateWithLifecycle()
+    LifecycleResumeEffect(vm) {
+        vm.foreground(true)
+        onPauseOrDispose { vm.foreground(false) }
+    }
     MaterialTheme(colorScheme = lightColorScheme(primary = Green, secondary = Slate, background = Ground, surface = Color.White, onSurface = Slate),
         shapes = Shapes(medium = RoundedCornerShape(16.dp), large = RoundedCornerShape(24.dp))) {
         Surface(Modifier.fillMaxSize(), color = Ground) {
             Column(Modifier.fillMaxSize().safeDrawingPadding().imePadding()) {
                 if (state.busy) LinearProgressIndicator(Modifier.fillMaxWidth())
+                if (state.profile?.activo == true) state.riskNotice?.let { alert ->
+                    Surface(color = Color(0xFFFEE2E2), modifier = Modifier.fillMaxWidth()
+                        .semantics { liveRegion = LiveRegionMode.Assertive }) {
+                        Column(Modifier.padding(horizontal = 16.dp, vertical = 8.dp)) {
+                            Text("Última alerta · RIESGO SIMULADO", color = Color(0xFF991B1B),
+                                fontWeight = FontWeight.Bold)
+                            Text("${alert.distance} cm · PIR detectado · ${alert.zone}",
+                                style = MaterialTheme.typography.bodySmall)
+                            Text("${alert.device} · Recibido ${date(alert.receivedAt)}",
+                                style = MaterialTheme.typography.bodySmall)
+                            TextButton(onClick = vm::dismissRisk) { Text("Entendido") }
+                        }
+                    }
+                }
                 state.message?.let { msg ->
                     Surface(color = Color(0xFFE8F0FE)) {
                         Row(Modifier.fillMaxWidth().padding(horizontal = 16.dp), verticalAlignment = Alignment.CenterVertically) {
@@ -395,8 +417,15 @@ fun ViaTechApp(vm: ViaTechViewModel = viewModel()) {
             Text("La desconexión afecta la consulta Android. El simulador conserva su propia cola local. La autenticación requiere conexión.",color=Muted)
             Text(if(BuildConfig.USE_EMULATORS) "Laboratorio local: conexión sin TLS al emulador. No usar con cuentas reales." else "Conexión Firebase mediante TLS del SDK; tráfico HTTP bloqueado.",color=Muted)
         }
+        Panel("Alertas del controlador Python") {
+            Toggle("Sonido de riesgo",state.soundAlerts,vm::soundAlerts)
+            Toggle("Vibración de riesgo",state.vibrationAlerts,vm::vibrationAlerts)
+            Text("Con ViaTech abierta, una nueva lectura simulada menor de 50 cm con movimiento PIR genera una alerta visual y las señales activadas.",color=Muted)
+            Text("El primer historial y la reconexión son silenciosos. Solo lecturas detectadas en los últimos 30 segundos; máximo una alerta cada 10 segundos.",color=Muted)
+            Text("Respeta silencio, volumen de notificaciones y No molestar. En segundo plano o con pantalla bloqueada no emite alertas.",color=Muted)
+        }
         Panel("Permisos y privacidad") {
-            Text("INTERNET y ACCESS_NETWORK_STATE son permisos normales concedidos por Android al instalar. No se solicitan permisos peligrosos innecesarios.")
+            Text("INTERNET, ACCESS_NETWORK_STATE y VIBRATE son permisos normales concedidos por Android al instalar. No se solicitan permisos peligrosos innecesarios.")
             Text("Las contraseñas las administra Firebase Authentication. No se guardan manualmente en el dispositivo.")
             Text("ISO/IEC 27400 se utiliza como guía de diseño; no es una certificación.")
         }
