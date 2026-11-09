@@ -13,8 +13,10 @@ from conector import Conector, configuracion, PROYECTO_AUTORIZADO
 class PruebasSensores(unittest.TestCase):
     def test_lanzador_python_abre_la_ventana(self):
         with patch("simulador.main") as main:
-            runpy.run_path(str(Path(__file__).with_name("ABRIR_SIMULADOR.py")), run_name="__main__")
-            main.assert_called_once_with()
+            for archivo in ("ABRIR_SIMULADOR.py", "controlador.py"):
+                main.reset_mock()
+                runpy.run_path(str(Path(__file__).with_name(archivo)), run_name="__main__")
+                main.assert_called_once_with()
 
     def test_limites_de_distancia(self):
         for valor in (2, 400, "35.5"):
