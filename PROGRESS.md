@@ -32,3 +32,9 @@ Actualizado: 2026-11-01, America/Santiago.
 - LoginUiTest migrado a androidx.compose.ui.test.junit4.v2.createAndroidComposeRule para eliminar el aviso de API obsoleta.
 - :app:compileLocalDebugAndroidTestKotlin: BUILD SUCCESSFUL (2 min 41 s; 29 tareas). Evidencia local: docs/pruebas/compose-v2-compile.log.
 - Las pruebas instrumentadas compilan; su ejecución en Android continúa pendiente.
+
+## Simulador Python — 2026-11-09
+- Creada carpeta independiente simulador_python con ventana Tkinter para HC-SR04 y PIR, lanzador Windows e instrucciones.
+- Modo visual sin red y modo Firebase opcional mediante el conector Node existente; no se incluyeron credenciales.
+- Prueba gráfica y envío Python a Firestore ejecutados y aprobados; evidencia y límites en simulador_python/VERIFICACION.md.
+- Lista de archivos excluidos de GitHub documentada. Los archivos ignorados no se eliminan del computador.
