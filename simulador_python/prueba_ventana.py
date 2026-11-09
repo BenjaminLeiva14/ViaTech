@@ -23,6 +23,12 @@ try:
     ventana.entrada.set("999")
     root.update()
     assert "distancia válida" in ventana.riesgo.get()
+    ventana.preparar_demo(True)
+    assert ventana.entrada.get() == "35" and ventana.movimiento.get()
+    assert ventana.riesgo.get() == "RIESGO · PIR: sí"
+    ventana.preparar_demo(False)
+    assert ventana.entrada.get() == "150" and not ventana.movimiento.get()
+    assert ventana.riesgo.get() == "INFORMACIÓN · PIR: no"
     assert ventana.conector is None
     assert ventana.enviar_btn.cget("text") == "Simular lectura"
     print("OK: ventana iniciada, controles actualizados, dos lecturas visuales, validacion y cierre; sin Firebase.")
