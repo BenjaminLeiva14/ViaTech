@@ -18,3 +18,6 @@ Abrir Android Studio en la raíz, seleccionar localDebug y compilar. Ejecutar Fi
 Registrar esperado, obtenido, estado y archivo de captura/log por paso. Si no hay dos Android o Wi-Fi físico, dejar pendiente; no sustituir por resultados inventados.
 ## Entrega académica
 La guía pide un bloc de notas con URL GitHub en AAI. Publicar solo el repositorio revisado, sin secretos, y copiar el enlace. Fecha exacta y escala de apreciación no estaban adjuntas. Revisión docente: pendiente, no simulada.
+
+## Demostración adicional: alertas de sensores
+Seguir docs/alertas-sensores.md para mostrar el cambio normal → riesgo desde controlador.py y el sonido/vibración en Android. Mantener la app en primer plano y documentar por separado la recepción Firebase y la señal física observada.
