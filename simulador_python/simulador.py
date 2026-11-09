@@ -70,6 +70,15 @@ class Ventana:
         self.enviar_btn.pack(side="left")
         ttk.Checkbutton(acciones, text="Repetir cada 5 segundos", variable=self.automatico).pack(side="left", padx=15)
         ttk.Label(panel, textvariable=self.ultimo, wraplength=650).pack(anchor="w")
+        demo = ttk.LabelFrame(panel, text="Demostración de alerta Android", padding=10)
+        demo.pack(fill="x", pady=8)
+        ttk.Button(demo, text="Preparar normal: 150 cm / sin PIR",
+                   command=lambda: self.preparar_demo(False)).pack(anchor="w")
+        ttk.Button(demo, text="Preparar riesgo: 35 cm / PIR",
+                   command=lambda: self.preparar_demo(True)).pack(anchor="w", pady=4)
+        ttk.Label(demo, text="Después pulsa Enviar a Firebase. Mantén ViaTech cloudDebug abierta.\n"
+                  "La app avisa por riesgo nuevo; espera 10 segundos entre alertas.",
+                  wraplength=620).pack(anchor="w")
         conexion = ttk.Frame(panel)
         conexion.pack(fill="x", pady=(16, 6))
         self.conectar_btn = ttk.Button(conexion, text="Conectar Firebase", command=self.conectar)
@@ -121,6 +130,14 @@ class Ventana:
             fondo, tinta = "#fee2e2", "#b91c1c"
             self.riesgo.set("Introduce una distancia válida: 2 a 400 cm")
         self.indicador.configure(bg=fondo, fg=tinta)
+
+    def preparar_demo(self, riesgo):
+        """Prepara valores; enviar sigue siendo una acción explícita del usuario."""
+        self.movimiento.set(bool(riesgo))
+        self.entrada.set("35" if riesgo else "150")
+        self._vista()
+        self.ultimo.set("Valores preparados. Pulsa Enviar a Firebase con ViaTech abierta."
+                        if self.listo else "Valores preparados en modo visual; conecta Firebase para avisar a Android.")
 
     def generar(self):
         try:
