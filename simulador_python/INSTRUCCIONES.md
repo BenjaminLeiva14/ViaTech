@@ -79,3 +79,6 @@ La copia solicitada está en .env.credenciales-privadas.md dentro de esta carpet
 ## Prueba de datos y recepción
 Ejecuta python prueba_flujo.py para crear seis lecturas (2, 49.75, 50, 99.5, 100 y 400 cm) con PIR activado/desactivado. Comprueba eventos y lecturas en el servidor y recepción en vivo por administrador y operador con las consultas de la app. Guarda resultado_flujo.json. No equivale a ejecutar Android.
 Para comprobar la pantalla: instala cloudDebug, inicia sesión como operador, abre Eventos o Sensores y envía desde la ventana. localDebug usa emuladores y no recibe los datos de nube.
+
+## Sonido y vibración en Android
+También puedes abrir python controlador.py. Los botones Preparar normal (150 cm, sin PIR) y Preparar riesgo (35 cm, con PIR) cambian los valores; pulsa después Enviar a Firebase. Mantén ViaTech cloudDebug abierta y activa las señales en Configuración. Espera 10 segundos entre alertas. Más detalles: ../docs/alertas-sensores.md.
