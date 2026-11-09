@@ -38,3 +38,12 @@ Actualizado: 2026-11-01, America/Santiago.
 - Modo visual sin red y modo Firebase opcional mediante el conector Node existente; no se incluyeron credenciales.
 - Prueba gráfica y envío Python a Firestore ejecutados y aprobados; evidencia y límites en simulador_python/VERIFICACION.md.
 - Lista de archivos excluidos de GitHub documentada. Los archivos ignorados no se eliminan del computador.
+
+## Lanzador Python y prueba ampliada — 2026-11-09
+- Sustituido el lanzador .bat por ABRIR_SIMULADOR.py; instrucciones actualizadas.
+- 10/10 pruebas locales y prueba real de la ventana aprobadas.
+- Seis lecturas enviadas por Python y verificadas en eventos/lecturas del servidor; recepción en tiempo real con administrador y operador, consultas equivalentes a Android y cola final vacía.
+- Configuración de cloudDebug verificada contra el proyecto y aplicación Firebase autorizados.
+- Android sigue pendiente: no hay dispositivo conectado y falta el controlador de aceleración del emulador. No se afirma recepción visual.
+- Markdown de credenciales creado exclusivamente de forma local, excluido de Git y comprobado sin exponer contraseñas.
+- Evidencia ampliada en simulador_python/VERIFICACION.md y resultado_flujo.json.
