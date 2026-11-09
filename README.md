@@ -74,3 +74,6 @@ Las dependencias npm se fijan mediante package-lock.json; revisar el informe de 
 
 ## Ventana Python para los sensores
 Abre simulador_python/ABRIR_SIMULADOR.py para ajustar distancia ultrasónica y movimiento PIR. Funciona en modo visual y permite conectar el simulador existente a Firebase. Ver [instrucciones](simulador_python/INSTRUCCIONES.md) y [archivos excluidos de GitHub](simulador_python/ARCHIVOS_FUERA_DE_GITHUB.md).
+
+## Alertas desde el controlador Python
+Abre simulador_python/controlador.py, conecta Firebase y prepara una lectura de riesgo (35 cm con PIR). Al enviarla, ViaTech cloudDebug abierta muestra una alerta y puede sonar/vibrar. Las preferencias están en Configuración; el historial y las reconexiones no reproducen alertas acumuladas. Ver [guion y límites](docs/alertas-sensores.md).
