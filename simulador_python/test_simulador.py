@@ -5,10 +5,17 @@ from pathlib import Path
 import queue
 import tempfile
 import unittest
+import runpy
+from unittest.mock import patch
 from sensores import Lectura
 from conector import Conector, configuracion, PROYECTO_AUTORIZADO
 
 class PruebasSensores(unittest.TestCase):
+    def test_lanzador_python_abre_la_ventana(self):
+        with patch("simulador.main") as main:
+            runpy.run_path(str(Path(__file__).with_name("ABRIR_SIMULADOR.py")), run_name="__main__")
+            main.assert_called_once_with()
+
     def test_limites_de_distancia(self):
         for valor in (2, 400, "35.5"):
             self.assertEqual(Lectura(valor, False).distancia_cm, float(valor))
