@@ -1,0 +1,46 @@
+{
+  "executedAt": "2026-11-09T05:55:16.9090958Z",
+  "build": "passed",
+  "buildDuration": "15m 42s",
+  "gradleTasks": [
+    ":app:assembleCloudDebug",
+    ":app:assembleLocalDebug",
+    ":app:testCloudDebugUnitTest",
+    ":app:testLocalDebugUnitTest",
+    ":app:compileLocalDebugAndroidTestKotlin"
+  ],
+  "unitTests": [
+    {
+      "variant": "cloudDebug",
+      "tests": 13,
+      "failuresAndErrors": 0
+    },
+    {
+      "variant": "localDebug",
+      "tests": 13,
+      "failuresAndErrors": 0
+    }
+  ],
+  "pythonTestsPassed": 10,
+  "pythonWindowTest": "passed",
+  "firebaseEvidence": "simulador_python/resultado_flujo.json",
+  "firebaseResult": "passed: six readings, two live SDK receivers, empty outbox",
+  "instrumentedTestsCompiled": true,
+  "instrumentedTestsExecuted": false,
+  "physicalSoundAndVibrationVerified": false,
+  "androidUiVerified": false,
+  "adbDevices": 0,
+  "apks": [
+    {
+      "path": "android/app/build/outputs/apk/cloud/debug/app-cloud-debug.apk",
+      "sha256": "79f92ffd0ed199a5be79f6f2d3614cf6484733b7d1cc45662bfbbacccf773719",
+      "bytes": 18498437
+    },
+    {
+      "path": "android/app/build/outputs/apk/local/debug/app-local-debug.apk",
+      "sha256": "cccc250834639af714db8fec4c40174b809a42fd5e7ce82433b3c0e2be286f9a",
+      "bytes": 18498441
+    }
+  ],
+  "localBuildLog": "docs/pruebas/alertas-android-build.log"
+}
