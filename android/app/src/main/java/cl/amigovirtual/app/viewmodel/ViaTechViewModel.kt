@@ -1,6 +1,8 @@
 package cl.amigovirtual.app.viewmodel
 
 import android.app.Application
+import android.os.SystemClock
+import cl.amigovirtual.app.alerts.*
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import cl.amigovirtual.app.ViaTechApplication
@@ -9,18 +11,28 @@ import cl.amigovirtual.app.data.repositories.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 
+data class RiskNotice(val eventId: String, val device: String, val zone: String, val distance: Double, val receivedAt: Long)
+
 data class AppState(
     val uid: String? = null, val profile: Profile? = null,
     val feeds: Map<String, Feed> = emptyMap(), val busy: Boolean = false,
     val message: String? = null, val configured: Boolean = true, val offline: Boolean = false,
-    val now: Long = System.currentTimeMillis(), val compact: Boolean = false
+    val now: Long = System.currentTimeMillis(), val compact: Boolean = false,
+    val soundAlerts: Boolean = true, val vibrationAlerts: Boolean = true,
+    val riskNotice: RiskNotice? = null
 )
 class ViaTechViewModel(app: Application) : AndroidViewModel(app) {
     private val provider = (app as ViaTechApplication).firebase
     private val auth = AuthRepository(provider)
     private val repository = MonitoringRepository(provider)
     private val preferences = app.getSharedPreferences("display", 0)
-    private val mutable = MutableStateFlow(AppState(configured = provider.configured, compact = preferences.getBoolean("compact", false)))
+    private val alertGate = RiskAlertGate()
+    private val feedback = AlertFeedback(app)
+    private var foreground = false
+    private val mutable = MutableStateFlow(AppState(configured = provider.configured,
+        compact = preferences.getBoolean("compact", false),
+        soundAlerts = preferences.getBoolean("soundAlerts", true),
+        vibrationAlerts = preferences.getBoolean("vibrationAlerts", true)))
     val state = mutable.asStateFlow()
     private var profileJob: Job? = null
     private val feeds = mutableListOf<Job>()
@@ -29,11 +41,12 @@ class ViaTechViewModel(app: Application) : AndroidViewModel(app) {
         viewModelScope.launch {
             auth.sessions.collect { uid ->
                 profileJob?.cancel(); clearFeeds()
-                mutable.update { AppState(uid = uid, configured = provider.configured, compact = it.compact) }
+                mutable.update { AppState(uid = uid, configured = provider.configured, compact = it.compact,
+                    soundAlerts = it.soundAlerts, vibrationAlerts = it.vibrationAlerts) }
                 if (uid != null) profileJob = launch {
                     repository.profile(uid).distinctUntilChanged().collect { profile ->
                         clearFeeds()
-                        mutable.update { it.copy(profile = profile, feeds = emptyMap()) }
+                        mutable.update { it.copy(profile = profile, feeds = emptyMap(), riskNotice = null) }
                         if (profile.activo) {
                             val collections = mutableListOf("eventos", "zonas")
                             if (profile.telemetry) collections += listOf("lecturas", "dispositivos")
@@ -41,6 +54,7 @@ class ViaTechViewModel(app: Application) : AndroidViewModel(app) {
                             collections.forEach { collection -> feeds += launch {
                                 repository.observe(collection).collect { feed ->
                                     mutable.update { it.copy(feeds = it.feeds + (collection to feed)) }
+                                    if (collection == "eventos") processAlerts(feed)
                                 }
                             } }
                         }
@@ -49,7 +63,46 @@ class ViaTechViewModel(app: Application) : AndroidViewModel(app) {
             }
         }
     }
-    private fun clearFeeds() { feeds.forEach(Job::cancel); feeds.clear() }
+    private fun clearFeeds() {
+        feeds.forEach(Job::cancel); feeds.clear()
+        alertGate.reset(System.currentTimeMillis())
+        feedback.stop()
+    }
+    private fun processAlerts(feed: Feed) {
+        val current = state.value
+        val event = alertGate.accept(feed, System.currentTimeMillis(), SystemClock.elapsedRealtime(),
+            foreground && current.uid != null && current.profile?.activo == true && !current.offline) ?: return
+        mutable.update { it.copy(riskNotice = RiskNotice(event.id, event.text("dispositivoId"),
+            event.text("zonaId"), event.number("distanciaCm")!!, System.currentTimeMillis())) }
+        feedback.play(current.soundAlerts, current.vibrationAlerts)
+    }
+    fun foreground(active: Boolean) {
+        if (foreground == active) return
+        foreground = active
+        feedback.stop()
+        alertGate.reset(System.currentTimeMillis())
+        mutable.update { it.copy(riskNotice = null) }
+        // Sembrar la línea base actual al volver a la pantalla; nunca reproducir historial.
+        if (active) state.value.feeds["eventos"]?.let(::processAlerts)
+    }
+    fun soundAlerts(enabled: Boolean) {
+        preferences.edit().putBoolean("soundAlerts", enabled).apply()
+        feedback.stop()
+        mutable.update { it.copy(soundAlerts = enabled) }
+    }
+    fun vibrationAlerts(enabled: Boolean) {
+        preferences.edit().putBoolean("vibrationAlerts", enabled).apply()
+        feedback.stop()
+        mutable.update { it.copy(vibrationAlerts = enabled) }
+    }
+    fun dismissRisk() {
+        feedback.stop()
+        mutable.update { it.copy(riskNotice = null) }
+    }
+    override fun onCleared() {
+        feedback.stop()
+        super.onCleared()
+    }
     fun message(value: String?) { mutable.update { it.copy(message = value) } }
     private fun action(block: suspend () -> String) {
         if (state.value.busy) return
@@ -78,7 +131,8 @@ class ViaTechViewModel(app: Application) : AndroidViewModel(app) {
     }
     fun logout() {
         profileJob?.cancel(); clearFeeds()
-        mutable.update { AppState(configured = provider.configured, compact = it.compact) }
+        mutable.update { AppState(configured = provider.configured, compact = it.compact,
+            soundAlerts = it.soundAlerts, vibrationAlerts = it.vibrationAlerts) }
         auth.logout()
         viewModelScope.launch { runCatching { repository.network(true) } }
     }
@@ -100,6 +154,8 @@ class ViaTechViewModel(app: Application) : AndroidViewModel(app) {
         repository.saveDevice(id,name,zone,active); "Dispositivo guardado."
     }
     fun offline(enabled: Boolean) = action {
+        feedback.stop()
+        alertGate.reset(System.currentTimeMillis())
         repository.network(!enabled); mutable.update { it.copy(offline = enabled) }
         if (enabled) "Conexión Firestore pausada para la demostración." else "Reconexión solicitada."
     }
